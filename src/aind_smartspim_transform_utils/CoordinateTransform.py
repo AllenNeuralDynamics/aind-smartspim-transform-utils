@@ -514,7 +514,7 @@ class CoordinateTransform:
 
         reg_dims = [dim / 2**reg_ds for dim in input_shape]
 
-        for idx, dim_orient in enumerate(mat.sum(axis=1)):
+        for idx, dim_orient in enumerate(mat.sum(axis=0)):
             if dim_orient < 0:
                 scaled_pts[:, idx] = reg_dims[idx] - scaled_pts[:, idx]
 
