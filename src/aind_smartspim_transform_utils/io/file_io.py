@@ -212,8 +212,6 @@ def get_transforms(dataset_path: str, channel: str, dest=None) -> list:
             dataset_path, "image_atlas_alignment", channel
         )
 
-        print(f"Pulling dataset transforms from {transforms_path}")
-
     try:
         transforms["points_to_ccf"] = [
             glob(os.path.join(transforms_path, "*SyN_0GenericAffine.mat"))[0],
