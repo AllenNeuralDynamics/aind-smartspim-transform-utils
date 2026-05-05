@@ -230,7 +230,7 @@ def _parse_acquisition_data(acquisition_dict: dict):
 
     """
 
-    orientation = acquisition_dict["axes"]
+    orientation = acquisition_dict["axes"].copy()
 
     scales = {}
     for scale, axis in zip(
@@ -239,11 +239,13 @@ def _parse_acquisition_data(acquisition_dict: dict):
     ):
         scales[axis] = scale
 
-    for c, axis in enumerate(orientation):
+    orientation_extended = [{}, {}, {}]
+    
+    for axis in orientation.items():
         for s, res in scales.items():
             if s == axis["name"]:
                 axis["resolution"] = res
-                orientation[c] = axis
+                orientation_extended[axis['dimension']] = axis
 
     channels = []
 
@@ -253,7 +255,7 @@ def _parse_acquisition_data(acquisition_dict: dict):
             channels.append(channel)
 
     acquisition = {
-        "orientation": orientation,
+        "orientation": orientation_extended,
         "registration": _get_estimated_downsample(
             [s[1] for s in sorted(scales.items(), reverse=True)]
         ),
