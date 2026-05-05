@@ -240,8 +240,7 @@ def _parse_acquisition_data(acquisition_dict: dict):
         scales[axis] = scale
 
     orientation_extended = [{}, {}, {}]
-    
-    for axis in orientation.items():
+    for axis in orientation:
         for s, res in scales.items():
             if s == axis["name"]:
                 axis["resolution"] = res
