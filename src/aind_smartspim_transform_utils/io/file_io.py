@@ -14,7 +14,6 @@ import ants
 import boto3
 import numpy as np
 import pandas as pd
-from imlib.IO.cells import get_cells
 from tqdm import tqdm
 
 
@@ -145,21 +144,8 @@ def _download_data_from_s3(data_folder: str, files: list, dest: str):
 
 
 def _read_xml_as_df(fpath: str) -> pd.DataFrame:  # pragma: no cover
-    file_cells = get_cells(fpath)
-
-    cells = []
-
-    for cell in file_cells:
-        cells.append(
-            [
-                cell.x,
-                cell.y,
-                cell.z,
-            ]
-        )
-
-    df = pd.DataFrame(cells, columns=["x", "y", "z"])
-
+    df = pd.read_xml(fpath, xpath="//CellCounter_Marker_File//Marker_Data//Marker_Type//Marker")
+    df = df.rename(columns={"MarkerX": "x", "MarkerY": "y", "MarkerZ": "z"})
     return df
 
 

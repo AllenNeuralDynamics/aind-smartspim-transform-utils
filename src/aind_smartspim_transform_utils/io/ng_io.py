@@ -8,7 +8,6 @@ Created on Fri May 30 14:20:43 2025
 
 import os
 
-import dask.array as da
 import numpy as np
 
 from aind_smartspim_transform_utils.io import file_io as fio
@@ -117,35 +116,3 @@ def get_neuroglancer_annotation_points(
     return points
 
 
-def get_neuroglancer_image(
-    neuroglancer_data: dict, layer_name: str
-) -> da.array:
-    """
-    Gets a dask array for an image specified from the layer name
-
-    Parameters
-    ----------
-    neuroglancer_data : dict
-        A dictionary of the neuroglancer state imported from a JSON
-    layer_name : str
-        The name of the layer that you are retrieving points
-
-    Returns
-    -------
-    image : da.array
-        dask array of the specified layer
-
-    """
-
-    layer_names = [layers["name"] for layers in neuroglancer_data["layers"]]
-
-    if layer_name not in layer_names:
-        ValueError(
-            f"There is no layer named {layer_name} in neuroglancer data"
-        )
-
-    for layer in neuroglancer_data["layers"]:
-        if layer["name"] == layer_name and layer["type"] == "image":
-            image = da.from_zarr(layer["source"], "0").squeeze()
-
-    return image
